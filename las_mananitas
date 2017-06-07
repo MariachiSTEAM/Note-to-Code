@@ -1,0 +1,243 @@
+const int buttonPin = 12;
+const int speakerPin = 8;
+
+const float pitch_rest = 0.00;
+const float pitch_A3 = 220.00;
+const float pitch_B3 = 246.94;
+const float pitch_C4 = 261.63;
+const float pitch_D4 = 293.66;
+const float pitch_E4 = 329.63;
+const float pitch_F4 = 349.23;
+const float pitch_G4 = 392.00;
+const float pitch_A4 = 440.00;
+const float pitch_B4 = 493.88;
+const float pitch_C5 = 523.25;
+const float pitch_D5 = 587.33;
+const float pitch_E5 = 659.25;
+const float pitch_F5 = 698.46;
+const float pitch_G5 = 783.99;
+const float pitch_A5 = 880.00;
+const float pitch_B5 = 987.77;
+const float pitch_C6 = 1046.50;
+
+const float tempoBase = 120.0;
+const float quarterNote = (60 / tempoBase) * 1000;
+const float eighthNote = quarterNote / 2;
+const float sixteenthNote = quarterNote / 4;
+const float halfNote = quarterNote * 2;
+const float wholeNote = quarterNote * 4;
+
+float testTune [][2] = {
+  { pitch_G4, eighthNote },
+  { pitch_G4, eighthNote },
+  { pitch_C5, quarterNote * 1.5 },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, quarterNote * 1.5 },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, quarterNote * 1.5 },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_F5, halfNote },
+  { pitch_F5, eighthNote },
+  { pitch_F5, eighthNote },
+  { pitch_E5, quarterNote * 1.5 },
+  { pitch_D5, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_D5, quarterNote },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, quarterNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, quarterNote },
+  { pitch_C5, halfNote },
+  //
+  { pitch_G4, eighthNote },
+  { pitch_G4, eighthNote },
+  { pitch_C5, quarterNote * 1.5 },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, quarterNote * 1.5 },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, quarterNote * 1.5 },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_F5, halfNote },
+  { pitch_F5, eighthNote },
+  { pitch_F5, eighthNote },
+  { pitch_E5, quarterNote * 1.5 },
+  { pitch_D5, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_D5, quarterNote },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, quarterNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, quarterNote },
+  { pitch_C5, halfNote },
+  //
+  { pitch_G5, quarterNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_F5, eighthNote },
+  { pitch_G5, quarterNote },
+  { pitch_E5, quarterNote },
+  { pitch_G5, quarterNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_F5, eighthNote },
+  { pitch_G5, halfNote },
+  { pitch_G5, quarterNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_F5, eighthNote },
+  { pitch_G5, quarterNote },
+  { pitch_E5, quarterNote },
+  { pitch_G5, eighthNote },
+  { pitch_G5, eighthNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_C5, halfNote },
+  //
+  { pitch_G4, eighthNote },
+  { pitch_G4, eighthNote },
+  { pitch_C5, quarterNote * 1.5 },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, quarterNote * 1.5 },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, quarterNote * 1.5 },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, eighthNote },
+  { pitch_F5, halfNote },
+  { pitch_F5, eighthNote },
+  { pitch_F5, eighthNote },
+  { pitch_E5, quarterNote * 1.5 },
+  { pitch_D5, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_D5, quarterNote },
+  { pitch_C5, eighthNote },
+  { pitch_B4, eighthNote },
+  { pitch_C5, eighthNote },
+  { pitch_D5, eighthNote },
+  { pitch_E5, quarterNote },
+  { pitch_F5, quarterNote },
+  { pitch_D5, quarterNote },
+  { pitch_C5, halfNote }
+};
+
+
+/* We need the length of the notes array to avoid running past the end and causing an error */
+int songLength = sizeof(testTune) / (2 * sizeof(float));
+
+/* This variable keeps track of where we are at in playing the song (which note in the array) */
+int noteCursor = 0;
+
+/* This keeps track of whether we should be playing, based on button status */
+bool songState = false;
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(speakerPin, OUTPUT);
+
+  /* Just for debugging */
+  Serial.begin(9600);
+  Serial.print("Getting ready to play this many notes: ");
+  Serial.println(songLength);
+}
+
+
+/* Note, you must press the button *SLOWLY* */
+void loop() {
+
+  /* If we've reached the end of the song, take a quick pause, then go back and play again */
+  if (noteCursor >= songLength) {
+    Serial.println("Song complete!!  Resting shortly and restarting!");
+    delay(500);
+    noteCursor = 0;
+  }
+
+  /* If we're not playing, and the button is pressed, begin */
+  if (!songState && digitalRead(buttonPin) == HIGH) {
+
+    /* Since the button was pressed, set the songState to true */
+    songState = true;
+
+    /* Play a note, then increment the song cursor to the next note */
+    playNote(testTune[noteCursor][0], testTune[noteCursor][1]);
+    noteCursor++;
+    
+  } else if (songState && digitalRead(buttonPin) == LOW && noteCursor < songLength) {
+    
+    /* The button was already pressed, so simply play the next note
+       and then increment the song cursor to the next note */
+    playNote(testTune[noteCursor][0], testTune[noteCursor][1]);
+    noteCursor++;
+  }
+  else if (songState && (digitalRead(buttonPin) == HIGH) ) {
+    /* If we reach here, the button was pressed */
+
+    /* Reset the song state (mark playing false) and silence the song */
+    songState = false;
+    noTone(speakerPin);
+
+    /* Wait for a button press to resume */
+    while (digitalRead(buttonPin) == HIGH) {
+      songState = false;
+    }
+
+    /* Some debug info if useful */
+    Serial.print("Song was paused at position: ");
+    Serial.println(noteCursor);
+  }
+}
+
+void playNote(float notePitch, float noteDuration) {
+
+  /* first check to make sure there's an actual (>0) pitch. Return if not */
+  if (notePitch <= 0) {
+    noTone(speakerPin);
+    return;
+  }
+
+  /* play the note:  'tone(pin, frequency)'   or   'tone(pin, frequency, duration)'
+   * The 3rd parameter, 'duration', appears to not be working, so we'll use the 2 parameter version
+   *   https://www.arduino.cc/en/reference/tone
+   */
+  tone(speakerPin, notePitch);
+
+  /* hold the note for the duration */
+  delay(noteDuration);
+
+  /*stop the tone playing*/
+  noTone(speakerPin);
+
+}

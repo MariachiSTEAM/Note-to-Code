@@ -195,7 +195,7 @@ void loop() {
     playNote(testTune[noteCursor][0], testTune[noteCursor][1]);
     noteCursor++;
     
-  } else if (songState && digitalRead(buttonPin) == LOW && noteCursor < songLength) {
+  } else if (songState && digitalRead(buttonPin) == LOW) {
     
     /* The button was already pressed, so simply play the next note
        and then increment the song cursor to the next note */
@@ -209,9 +209,9 @@ void loop() {
     songState = false;
     noTone(speakerPin);
 
-    /* Wait for a button press to resume */
+    /* Wait for the button release */
     while (digitalRead(buttonPin) == HIGH) {
-      songState = false;
+      /* busy wait */
     }
 
     /* Some debug info if useful */
